@@ -1,9 +1,26 @@
 import math
 
-# CONSTANTS
+#  --- CONSTANTS --- 
+# gravitation parameters
 us = 132712440000 # sol gravitational parameter
-ue = 398600 # earths gravitational parameter
-re = 6378 # earths radius
+ume = 22032
+uv = 324859
+ue = 398600
+um = 42828
+uj = 126686534
+usa = 37931187
+uu = 5793939
+un = 6836529
+
+# planet radii
+rme = 2439
+rv = 6051
+re = 6378
+rm = 3389
+rj = 69911
+rs = 58232
+ru = 25362
+rn = 24622
 
 # orbital radius of all planets around sol
 rmes = 57909227
@@ -20,7 +37,11 @@ run = True
 def ClearScreen():
     print("\n" * 100)
 
-def SinglePlanet(r1, r2, u):
+def SinglePlanet(r1, r2, u, rp):
+    # add planets radius to orbit altitude
+    r1 += rp
+    r2 += rp
+
     # first find orbit speeds
     v1 = math.sqrt(u/r1)
     v2 = math.sqrt(u/r2)
@@ -107,20 +128,39 @@ def PlanetChoice():
     elif (plan == "h"):
         return rns
 
+def SinglePlanetChoice():
+    ClearScreen()
+    rf = float(input("Enter first orbit altitude: (km) "))
+    rs = float(input("Enter second orbit altitude: (km) "))
+    ClearScreen()
+
+    print("\n\nChoose start planet: \na) Mercury, \nb) Venus, \nc) Earth, \nd) Mars, \ne) Jupiter, \nf) Saturn, \ng) Uranus, \nh) Neptune")
+    plan = input().lower()
+    if (plan == "a"):
+        SinglePlanet(rf, rs, ume, rme)
+    elif (plan == "b"):
+        SinglePlanet(rf, rs, uv, rv)
+    elif (plan == "c"):
+        SinglePlanet(rf, rs, ue, re)
+    elif (plan == "d"):
+        SinglePlanet(rf, rs, um, rm)
+    elif (plan == "e"):
+        SinglePlanet(rf, rs, uj, rj)
+    elif (plan == "f"):
+        SinglePlanet(rf, rs, usa, rs)
+    elif (plan == "g"):
+        SinglePlanet(rf, rs, uu, ru)
+    elif (plan == "h"):
+        SinglePlanet(rf, rs, un, rn)
+
 def Menu():
     global run
     ClearScreen()
     print("----- Hohmann Transfer Calculator -----")
-    print("Would you like to calculate: \n1) Earth orbit transfer (eg. LEO -> GEO) \n2) Interplanetary transfer \nQ) Quit program")
+    print("Would you like to calculate: \n1) Single Planet orbit transfer (eg. LEO -> GEO) \n2) Interplanetary transfer \nQ) Quit program")
     transfer = input()
     if (transfer == "1"):
-        ClearScreen()
-        rf = float(input("Enter first orbit altitude: (km) "))
-        rf += re # add earths radius
-        rs = float(input("Enter second orbit altitude: (km) "))
-        rs += re
-
-        SinglePlanet(rf, rs, ue)
+        SinglePlanetChoice()
 
     elif (transfer == "2"):
         p1 = PlanetChoice()
