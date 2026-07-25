@@ -65,6 +65,20 @@ def SinglePlanet(r1, r2, u, rp):
     th = t/3600 # convert to hours
     t = t/86400 # convert to days
 
+    # convert to m/s if less than 1km/s
+    dv1str = "km/s"
+    dv2str = "km/s"
+    dvstr = "km/s"
+    if (dv1 < 1): 
+        dv1 *= 1000 
+        dv1str = "m/s"
+    if (dv2 < 1): 
+        dv2 *= 1000
+        dv2str = "m/s"
+    if (dv < 1): 
+        dv *= 1000
+        dvstr = "m/s"
+
     # round to 2dp
     dv = round(dv, 2)
     dv1 = round(dv1, 2)
@@ -72,10 +86,12 @@ def SinglePlanet(r1, r2, u, rp):
     t = round(t, 2)
     th = round(th, 2)
 
+    
+
     ClearScreen()
-    print("delta v for first burn (Perigee boost): " + str(dv1) + "km/s")
-    print("delta v for second burn (Circularization): " + str(dv2) + "km/s")
-    print("This transfer will cost: " + str(dv) + "km/s total and will take:", t, "days, (" + str(th) + " hours)")
+    print("delta v for first burn (Perigee boost): " + str(dv1) + dv1str)
+    print("delta v for second burn (Circularization): " + str(dv2) + dv2str)
+    print("This transfer will cost: " + str(dv) + dvstr + " total and will take:", t, "days, (" + str(th) + " hours)")
     input()
 
 def InterplanetaryTransfer(rp1, rp2, u):
@@ -109,7 +125,7 @@ def InterplanetaryTransfer(rp1, rp2, u):
 
 def PlanetChoice():
     ClearScreen()
-    print("\n\nChoose start planet: \na) Mercury, \nb) Venus, \nc) Earth, \nd) Mars, \ne) Jupiter, \nf) Saturn, \ng) Uranus, \nh) Neptune")
+    print("\n\nChoose planet: \na) Mercury, \nb) Venus, \nc) Earth, \nd) Mars, \ne) Jupiter, \nf) Saturn, \ng) Uranus, \nh) Neptune")
     plan = input().lower()
     if (plan == "a"):
         return rmes
@@ -134,7 +150,7 @@ def SinglePlanetChoice():
     rs = float(input("Enter second orbit altitude: (km) "))
     ClearScreen()
 
-    print("\n\nChoose start planet: \na) Mercury, \nb) Venus, \nc) Earth, \nd) Mars, \ne) Jupiter, \nf) Saturn, \ng) Uranus, \nh) Neptune")
+    print("\n\nChoose planet: \na) Mercury, \nb) Venus, \nc) Earth, \nd) Mars, \ne) Jupiter, \nf) Saturn, \ng) Uranus, \nh) Neptune \ni) Custom")
     plan = input().lower()
     if (plan == "a"):
         SinglePlanet(rf, rs, ume, rme)
@@ -152,6 +168,10 @@ def SinglePlanetChoice():
         SinglePlanet(rf, rs, uu, ru)
     elif (plan == "h"):
         SinglePlanet(rf, rs, un, rn)
+    elif (plan == "i"):
+        u = float(input("Enter planets gravitational parameter: "))
+        r = float(input("Enter planets radius: "))
+        SinglePlanet(rf, rs, u, r)
 
 def Menu():
     global run
