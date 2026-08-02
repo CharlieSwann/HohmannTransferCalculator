@@ -114,13 +114,18 @@ def InterplanetaryTransfer(rp1, rp2, u):
     # delta v calc
     dv = abs(vdep - v1s)
 
+    # angle calc
+    ang = 180 * (1 - pow(((rp1 + rp2) / (2*rp2)), (3/2)))
+
     # round to 2dp
     dv = round(dv, 2)
     t = round(t, 2)
     ty = round(ty, 2)
+    ang = round(ang, 2)
 
     ClearScreen()
     print("This transfer will cost: " + str(dv) + "km/s and will take:", t, "days (" + str(ty) + " years)")
+    print("The transfer angle is: " + str(ang) + "°")
     input()
 
 def PlanetChoice():
