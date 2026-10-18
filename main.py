@@ -1,36 +1,16 @@
 import math
 
 #  --- CONSTANTS --- 
+
+bodyNames = ["Mercury","Venus","Earth","Mars","Jupiter","Saturn","Uranus","Neptune","Sun"]
 # gravitation parameters
-us = 132712440000 # sol gravitational parameter
-ume = 22032
-uv = 324859
-ue = 398600
-um = 42828
-uj = 126686534
-usa = 37931187
-uu = 5793939
-un = 6836529
+gravParams = [22032, 324859, 398600, 42828, 126686534, 37931187, 5793939, 6836529, 132712440000]
 
 # planet radii
-rme = 2439
-rv = 6051
-re = 6378
-rm = 3389
-rj = 69911
-rs = 58232
-ru = 25362
-rn = 24622
+radii = [2439, 6051, 6378, 3389, 69911, 58232, 25362, 24622]
 
 # orbital radius of all planets around sol
-rmes = 57909227
-rvs = 108209475
-res = 149597870
-rms = 227943824
-rjs = 778340821
-rss = 1426666422
-rus = 2870658186
-rns = 4498396441
+orbitRads = [57909227, 108209475, 149597870, 227943824, 778340821, 1426666422, 2870658186, 4498396441]
 
 run = True
 
@@ -111,6 +91,9 @@ def InterplanetaryTransfer(rp1, rp2, u):
     vdep = math.sqrt(u * ((2/rp1)-(1/a))) # vis viva
     varr = math.sqrt(u * ((2/rp2)-(1/a))) 
 
+    # Hyperbolic excess speed relative to the destination planet
+    vinf = abs(varr - v2s)
+
     # delta v calc
     dv = abs(vdep - v1s)
 
@@ -126,6 +109,17 @@ def InterplanetaryTransfer(rp1, rp2, u):
     ClearScreen()
     print("This transfer will cost: " + str(dv) + "km/s and will take:", t, "days (" + str(ty) + " years)")
     print("The transfer angle is: " + str(ang) + "°")
+    alt = float(input("Enter altitude for circularisation: (km) "))
+    ind = orbitRads.index(rp2)
+    r = alt + float(radii[ind])
+    ClearScreen()
+
+    # find speed at periapsis
+    vp = math.sqrt(vinf**2 + (2*gravParams[ind]/r))
+    vdes = math.sqrt(gravParams[ind]/r)
+
+    vcir = vp-vdes
+    print("Delta V for circularisation: " + str(round(vcir, 2)) + "km/s")
     input()
 
 def PlanetChoice():
@@ -133,21 +127,21 @@ def PlanetChoice():
     print("\n\nChoose planet: \na) Mercury, \nb) Venus, \nc) Earth, \nd) Mars, \ne) Jupiter, \nf) Saturn, \ng) Uranus, \nh) Neptune")
     plan = input().lower()
     if (plan == "a"):
-        return rmes
+        return orbitRads[0]
     elif (plan == "b"):
-        return rvs
+        return orbitRads[1]
     elif (plan == "c"):
-        return res
+        return orbitRads[2]
     elif (plan == "d"):
-        return rms
+        return orbitRads[3]
     elif (plan == "e"):
-        return rjs
+        return orbitRads[4]
     elif (plan == "f"):
-        return rss
+        return orbitRads[5]
     elif (plan == "g"):
-        return rus
+        return orbitRads[6]
     elif (plan == "h"):
-        return rns
+        return orbitRads[7]
 
 def SinglePlanetChoice():
     ClearScreen()
@@ -158,21 +152,21 @@ def SinglePlanetChoice():
     print("\n\nChoose planet: \na) Mercury, \nb) Venus, \nc) Earth, \nd) Mars, \ne) Jupiter, \nf) Saturn, \ng) Uranus, \nh) Neptune \ni) Custom")
     plan = input().lower()
     if (plan == "a"):
-        SinglePlanet(rf, rs, ume, rme)
+        SinglePlanet(rf, rs, gravParams[0], radii[0])
     elif (plan == "b"):
-        SinglePlanet(rf, rs, uv, rv)
+        SinglePlanet(rf, rs, gravParams[1], radii[1])
     elif (plan == "c"):
-        SinglePlanet(rf, rs, ue, re)
+        SinglePlanet(rf, rs, gravParams[2], radii[2])
     elif (plan == "d"):
-        SinglePlanet(rf, rs, um, rm)
+        SinglePlanet(rf, rs, gravParams[3], radii[3])
     elif (plan == "e"):
-        SinglePlanet(rf, rs, uj, rj)
+        SinglePlanet(rf, rs, gravParams[4], radii[4])
     elif (plan == "f"):
-        SinglePlanet(rf, rs, usa, rs)
+        SinglePlanet(rf, rs, gravParams[5], radii[5])
     elif (plan == "g"):
-        SinglePlanet(rf, rs, uu, ru)
+        SinglePlanet(rf, rs, gravParams[6], radii[6])
     elif (plan == "h"):
-        SinglePlanet(rf, rs, un, rn)
+        SinglePlanet(rf, rs, gravParams[7], radii[7])
     elif (plan == "i"):
         u = float(input("Enter planets gravitational parameter: "))
         r = float(input("Enter planets radius: "))
@@ -191,7 +185,7 @@ def Menu():
         p1 = PlanetChoice()
         p2 = PlanetChoice()
 
-        InterplanetaryTransfer(p1, p2, us)
+        InterplanetaryTransfer(p1, p2, gravParams[8])
 
     elif (transfer.lower() == "q"):
         run = False
