@@ -106,13 +106,12 @@ def InterplanetaryTransfer(rp1, rp2, u):
     ty = round(ty, 2)
     ang = round(ang, 2)
 
-    ClearScreen()
-    print("This transfer will cost: " + str(dv) + "km/s and will take:", t, "days (" + str(ty) + " years)")
-    print("The transfer angle is: " + str(ang) + "°")
     alt = float(input("Enter altitude for circularisation: (km) "))
     ind = orbitRads.index(rp2)
     r = alt + float(radii[ind])
     ClearScreen()
+    print("This transfer will cost: " + str(dv) + "km/s and will take:", t, "days (" + str(ty) + " years)")
+    print("The transfer angle is: " + str(ang) + "°")
 
     # find speed at periapsis
     vp = math.sqrt(vinf**2 + (2*gravParams[ind]/r))
